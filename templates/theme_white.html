@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link href="css/jquery-ui.min.css" rel="stylesheet">
+	<link href="css/jquery-ui.structure.min.css" rel="stylesheet">
+	<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script>
+		function log() {
+			var string = "";
+			for (var i = 0; i < arguments.length; i++) {
+				if (arguments[i] === undefined) string += " undefined";
+				else if (typeof arguments[i] == 'object') string += " " + JSON.stringify(arguments[i]);
+				else string += " " + arguments[i].toString();
+			}
+			bridge.log(string);
+		}
+
+
+		function StreamChat() {
+			this.chats = {
+				cybergame: {
+					message: function(data) {
+						// {"when":1436954340366,"from":"APXEOLOG","text":"ZZzz"}
+						appendMessage("cybergame", data.when, data.from, data.text);
+						return true;
+					},
+					online: function(data) {
+						// data.online
+						return true;
+					}
+				},
+				twitch: {
+					message: function(data) {
+						//  { "hostname": "apxeolog.tmi.twitch.tv", "sender": "apxeolog", "channel": "#apxeolog", "login": "apxeolog", "message": "privet" }
+						appendMessage("twitch", 0, data.sender, data.message);
+						return true;
+					},
+					online: function(data) {
+						if (data.stream != null) {
+							// data.stream.
+						} else {
+							// 0
+						}
+						return true;
+					}
+				},
+				goodgame: {
+					message: function(data) {
+						// { "channel_id": 40086.0, "user_id": 135026.0, "user_name": "APXEOLOG", "user_rights": 20.0, "premium": 0.0, "premiums": [], "hideIcon": 0.0,
+  						//   "color": "", "icon": "", "isStatus": 0.0, "mobile": 0.0, "payments": "0", "paidsmiles": [], "message_id": 6.0, "timestamp": 1.436956679E9, "text": "privet" }
+  						appendMessage("goodgame", data.timestamp, data.user_name, data.text);
+  						return true;
+					},
+					online: function(data) {
+						// data.clients_in_channel
+						return true;
+					}
+				},
+				hitbox: {
+					message: function(data) {
+						// { "image": "/static/img/channel/masta_52274f9e8159b_small.jpg", "role": "admin", "isSubscriber": false, "isStaff": false, "nameColor": "D0782C", "channel": "apxeolog",
+  						//	 "media": false, "isOwner": true, "name": "APXEOLOG", "text": "qweqwe", "time": 1.436956753E9, "isFollower": false, "isCommunity": false }
+  						appendMessage("hitbox", data.time, data.name, data.text);
+  						return true;
+					},
+					online: function(data) {
+						
+					}
+				}
+			};
+
+			this.init = function(data) {
+				for (var i = 0; i < arguments.length; i++) {
+					if (this.chats[arguments[i]] === undefined) this.chats[arguments[i]] = {};
+					this.chats[arguments[i]].enabled = true;
+				}
+				bridge.connect();
+			}
+
+			this.emit = function(chat, type, args) {
+				if (this.chats[chat] && this.chats[chat][type]) {
+					var result = this.chats[chat][type](JSON.parse(args));
+					if (result !== true) log(chat, type, args); // Unhandled
+				} else log(chat, type, args); // Unhandled
+			}
+		}
+
+
+
+		$(document).ready(function() {
+			var streamChat = new StreamChat();
+			bridge.init(streamChat);
+			$(function() {
+				$("#resizable").resizable();
+			});
+			$(window).resize(function() {
+				//alert('resized!');
+			});
+		});
+
+		function appendMessage(chat, timestamp, author, text) {
+			var src = "";
+			if (chat == "cybergame") src = "http://cybergame.tv/favicon.ico";
+			if (chat == "twitch") src = "http://twitch.tv/favicon.ico";
+			if (chat == "goodgame") src = "http://goodgame.ru/favicon.ico";
+			if (chat == "hitbox") src = "http://hitbox.tv/favicon.ico";
+			$('.chat').append('<div><img src="' + src + '">' + author + ': ' + text + '</div>');
+		}
+
+		$(document).ready(function() {
+			log($('.chat').length);
+		});
+	</script>
+</head>
+<body>
+<div class="chat" style="overflow-y: scroll; height:200px;">
+	<p>Nothing</p>
+</div>
+</body>
+</html>
