@@ -9,6 +9,56 @@
 	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 	<script>
+
+		/**
+		 * Emulate chat backend for simple theme development
+		 * Just run this html file in browser and this code will
+		 * automatically send test messages and online statistic
+		 * for supported chats
+		 */
+		function emulateChatBackend() {
+			if (window.bridge === undefined) {
+				window.bridge = {
+					log: function(str) {
+						console.log(str);
+					},
+					init: function(obj) {
+						this.chatObj = obj;
+						obj.init();
+					},
+					connect: function() {
+						var _this = this;
+						_this.i = 0;
+						setInterval(function() {
+							_this.i++;
+							switch (_this.i) {
+								case 1:
+									_this.chatObj.emit("cybergame", "message", '{"when":' + new Date().getTime() + ',"from":"APXEOLOG","text":"Another Cybergame Message"}');
+									_this.chatObj.emit("cybergame", "online", '{"channel name":"apxeolog","channel_game":"\u0434\u0440\u0443\u0433\u043e\u0435","online":"0","viewers":"0","thumbnail":"http:\/\/fileapi.cybergame.tv\/thumbnails\/channels\/","rtmp":"rtmp:\/\/stream1.cybergame.tv:1936\/live1\/_definst_\/apxeolog","m3u8":"http:\/\/stream1.cybergame.tv:8080\/live1\/apxeolog.m3u8"}');
+									break;
+								case 2:
+									_this.chatObj.emit("twitch", "message", '{ "hostname": "apxeolog.tmi.twitch.tv", "sender": "apxeolog", "channel": "#apxeolog", "login": "apxeolog", "message": "Another Twitch Message" }');
+									// Twitch only sends viewers when stream is online, otherwise stream = null (no viewers)
+									_this.chatObj.emit("twitch", "online", '{"_links":{"self":"https://api.twitch.tv/kraken/streams/apxeolog","channel":"https://api.twitch.tv/kraken/channels/apxeolog"},"stream":null}');
+									break;
+								case 3:
+									_this.chatObj.emit("goodgame", "message", '{ "channel_id": 40086.0, "user_id": 135026.0, "user_name": "APXEOLOG", "user_rights": 20.0, "premium": 0.0, "premiums": [], "hideIcon": 0.0, "color": "", "icon": "", "isStatus": 0.0, "mobile": 0.0, "payments": "0", "paidsmiles": [], "message_id": 6.0, "timestamp": ' + new Date().getTime() / 1000 + ', "text": "Another Goodgame Message" }');
+									_this.chatObj.emit("goodgame", "online", '{ "channel_id": 40086.0, "clients_in_channel": "1", "users_in_channel": 0.0 }');
+									break;
+								case 4:
+									_this.chatObj.emit("hitbox", "message", '{ "image": "/static/img/channel/masta_52274f9e8159b_small.jpg", "role": "admin", "isSubscriber": false, "isStaff": false, "nameColor": "D0782C", "channel": "apxeolog", "media": false, "isOwner": true, "name": "APXEOLOG", "text": "Another Hitbox Message", "time": ' + new Date().getTime() / 1000 + ', "isFollower": false, "isCommunity": false }');
+									// Received only when viewer count changes
+									_this.chatObj.emit("hitbox", "online", '{ "channel":"apxeolog", "viewers":1, "subscribers":0, "followers":1, "registered":1, "embed":0, "online":false }');
+									break;
+								default:
+									_this.i = 0;
+							}
+						}, 1000);
+					}
+				}
+			}
+		}
+
 		function log() {
 			var string = "";
 			for (var i = 0; i < arguments.length; i++) {
@@ -19,12 +69,10 @@
 			bridge.log(string);
 		}
 
-
 		function StreamChat() {
 			this.chats = {
 				cybergame: {
 					message: function(data) {
-						// {"when":1436954340366,"from":"APXEOLOG","text":"ZZzz"}
 						appendMessage("cybergame", data.when, data.from, data.text);
 						return true;
 					},
@@ -35,7 +83,6 @@
 				},
 				twitch: {
 					message: function(data) {
-						//  { "hostname": "apxeolog.tmi.twitch.tv", "sender": "apxeolog", "channel": "#apxeolog", "login": "apxeolog", "message": "privet" }
 						appendMessage("twitch", 0, data.sender, data.message);
 						return true;
 					},
@@ -50,8 +97,6 @@
 				},
 				goodgame: {
 					message: function(data) {
-						// { "channel_id": 40086.0, "user_id": 135026.0, "user_name": "APXEOLOG", "user_rights": 20.0, "premium": 0.0, "premiums": [], "hideIcon": 0.0,
-  						//   "color": "", "icon": "", "isStatus": 0.0, "mobile": 0.0, "payments": "0", "paidsmiles": [], "message_id": 6.0, "timestamp": 1.436956679E9, "text": "privet" }
   						appendMessage("goodgame", data.timestamp, data.user_name, data.text);
   						return true;
 					},
@@ -62,8 +107,6 @@
 				},
 				hitbox: {
 					message: function(data) {
-						// { "image": "/static/img/channel/masta_52274f9e8159b_small.jpg", "role": "admin", "isSubscriber": false, "isStaff": false, "nameColor": "D0782C", "channel": "apxeolog",
-  						//	 "media": false, "isOwner": true, "name": "APXEOLOG", "text": "qweqwe", "time": 1.436956753E9, "isFollower": false, "isCommunity": false }
   						appendMessage("hitbox", data.time, data.name, data.text);
   						return true;
 					},
@@ -92,6 +135,7 @@
 
 
 		$(document).ready(function() {
+			emulateChatBackend();
 			var streamChat = new StreamChat();
 			bridge.init(streamChat);
 			$(function() {
@@ -110,10 +154,6 @@
 			if (chat == "hitbox") src = "http://hitbox.tv/favicon.ico";
 			$('.chat').append('<div><img src="' + src + '">' + author + ': ' + text + '</div>');
 		}
-
-		$(document).ready(function() {
-			log($('.chat').length);
-		});
 	</script>
 </head>
 <body>
