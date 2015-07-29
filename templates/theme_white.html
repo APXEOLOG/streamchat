@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title></title>
+	<link href="css/theme_white.css" rel="stylesheet">
 	<link href="css/jquery-ui.min.css" rel="stylesheet">
 	<link href="css/jquery-ui.structure.min.css" rel="stylesheet">
 	<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
@@ -33,20 +34,20 @@
 							_this.i++;
 							switch (_this.i) {
 								case 1:
-									_this.chatObj.emit("cybergame", "message", '{"when":' + new Date().getTime() + ',"from":"APXEOLOG","text":"Another Cybergame Message"}');
+									_this.chatObj.emit("cybergame", "message", '{"when":' + new Date().getTime() + ',"from":"lampochka1488","text":"Всем привет, это я, проверяю тут, как работают многострочные сообщения, например"}');
 									_this.chatObj.emit("cybergame", "online", '{"channel name":"apxeolog","channel_game":"\u0434\u0440\u0443\u0433\u043e\u0435","online":"0","viewers":"0","thumbnail":"http:\/\/fileapi.cybergame.tv\/thumbnails\/channels\/","rtmp":"rtmp:\/\/stream1.cybergame.tv:1936\/live1\/_definst_\/apxeolog","m3u8":"http:\/\/stream1.cybergame.tv:8080\/live1\/apxeolog.m3u8"}');
 									break;
 								case 2:
-									_this.chatObj.emit("twitch", "message", '{ "hostname": "apxeolog.tmi.twitch.tv", "sender": "apxeolog", "channel": "#apxeolog", "login": "apxeolog", "message": "Another Twitch Message" }');
+									_this.chatObj.emit("twitch", "message", '{ "hostname": "apxeolog.tmi.twitch.tv", "sender": "apxeolog", "channel": "#apxeolog", "login": "apxeolog", "message": "Куда донатить ?" }');
 									// Twitch only sends viewers when stream is online, otherwise stream = null (no viewers)
 									_this.chatObj.emit("twitch", "online", '{"_links":{"self":"https://api.twitch.tv/kraken/streams/apxeolog","channel":"https://api.twitch.tv/kraken/channels/apxeolog"},"stream":null}');
 									break;
 								case 3:
-									_this.chatObj.emit("goodgame", "message", '{ "channel_id": 40086.0, "user_id": 135026.0, "user_name": "APXEOLOG", "user_rights": 20.0, "premium": 0.0, "premiums": [], "hideIcon": 0.0, "color": "", "icon": "", "isStatus": 0.0, "mobile": 0.0, "payments": "0", "paidsmiles": [], "message_id": 6.0, "timestamp": ' + new Date().getTime() / 1000 + ', "text": "Another Goodgame Message" }');
+									_this.chatObj.emit("goodgame", "message", '{ "channel_id": 40086.0, "user_id": 135026.0, "user_name": "SpaceGoose", "user_rights": 20.0, "premium": 0.0, "premiums": [], "hideIcon": 0.0, "color": "", "icon": "", "isStatus": 0.0, "mobile": 0.0, "payments": "0", "paidsmiles": [], "message_id": 6.0, "timestamp": ' + new Date().getTime() / 1000 + ', "text": "Хватит мне звонить уже, ни одно дело доделать не могу нормально " }');
 									_this.chatObj.emit("goodgame", "online", '{ "channel_id": 40086.0, "clients_in_channel": "1", "users_in_channel": 0.0 }');
 									break;
 								case 4:
-									_this.chatObj.emit("hitbox", "message", '{ "image": "/static/img/channel/masta_52274f9e8159b_small.jpg", "role": "admin", "isSubscriber": false, "isStaff": false, "nameColor": "D0782C", "channel": "apxeolog", "media": false, "isOwner": true, "name": "APXEOLOG", "text": "Another Hitbox Message", "time": ' + new Date().getTime() / 1000 + ', "isFollower": false, "isCommunity": false }');
+									_this.chatObj.emit("hitbox", "message", '{ "image": "/static/img/channel/masta_52274f9e8159b_small.jpg", "role": "admin", "isSubscriber": false, "isStaff": false, "nameColor": "D0782C", "channel": "apxeolog", "media": false, "isOwner": true, "name": "Kramola", "text": "Это все заговор жидомассонских рептилоидов с марса !", "time": ' + new Date().getTime() / 1000 + ', "isFollower": false, "isCommunity": false }');
 									// Received only when viewer count changes
 									_this.chatObj.emit("hitbox", "online", '{ "channel":"apxeolog", "viewers":1, "subscribers":0, "followers":1, "registered":1, "embed":0, "online":false }');
 									break;
@@ -147,18 +148,14 @@
 		});
 
 		function appendMessage(chat, timestamp, author, text) {
-			var src = "";
-			if (chat == "cybergame") src = "http://cybergame.tv/favicon.ico";
-			if (chat == "twitch") src = "http://twitch.tv/favicon.ico";
-			if (chat == "goodgame") src = "http://goodgame.ru/favicon.ico";
-			if (chat == "hitbox") src = "http://hitbox.tv/favicon.ico";
-			$('.chat').append('<div><img src="' + src + '">' + author + ': ' + text + '</div>');
+			var date = new Date(timestamp*1000);
+			var hours = "0" + date.getHours();
+			var minutes = "0" + date.getMinutes();
+			$('.chat').append('<div class="post icon_' + chat + '"><span class="timestamp">' + hours.substr(-2) + ':' + minutes.substr(-2) + '</span> <span class="author">' + author + ':</span> ' + text + '</div>');
 		}
 	</script>
 </head>
 <body>
-<div class="chat" style="overflow-y: scroll; height:200px;">
-	<p>Nothing</p>
-</div>
+<div class="chat"></div>
 </body>
 </html>

@@ -1,0 +1,51 @@
+@font-face {
+    font-family: "RobotoMedium";
+    src: url("../fonts/RobotoMedium.eot");
+    src: url("../fonts/RobotoMedium.eot?#iefix")format("embedded-opentype"),
+    url("../fonts/RobotoMedium.woff") format("woff"),
+    url("../fonts/RobotoMedium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+body {
+	font-size: 14px;
+	color:#696969;
+	padding:16px;
+	font-family: "RobotoMedium", Verdana, Helvetica, Arial;
+}
+.author {
+	color:#008000;
+}
+.icon {
+	margin-right: 8px;
+	width:14px;
+	float:left;
+}
+.chat {
+	overflow-y: scroll; 
+	height:400px;
+	width:350px;
+}
+.icon_cybergame {
+		background: url(http://cybergame.tv/favicon.ico) no-repeat;
+}
+.icon_twitch{
+		background: url(http://twitch.tv/favicon.ico) no-repeat;
+}
+.icon_goodgame{
+		background: url(http://goodgame.ru/favicon.ico) no-repeat;
+}
+.icon_hitbox{
+		background: url(http://hitbox.tv/favicon.ico) no-repeat;
+}
+.post{
+	padding-left:24px;
+	margin-bottom:8px;
+	margin-left:8px;
+	background-position: 0px 2px;
+	margin-right: 8px;
+}
+.timestamp{
+	color:#aaa;
+}
