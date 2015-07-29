@@ -10,7 +10,7 @@ task releaseJar(type: Jar) {
         attributes(
             'Implementation-Title': 'StreamChat',
             'Implementation-Version': version,
-            'Main-Class': 'org.apxeolog.streamchat.Main',
+            'Main-Class': 'org.apxeolog.streamchat.StreamChatApp',
             'Author': 'APXEOLOG'
         )
     }
