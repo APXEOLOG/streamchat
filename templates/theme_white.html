@@ -151,11 +151,15 @@
 			var date = new Date(timestamp*1000);
 			var hours = "0" + date.getHours();
 			var minutes = "0" + date.getMinutes();
-			$('.chat').append('<div class="post icon_' + chat + '"><span class="timestamp">' + hours.substr(-2) + ':' + minutes.substr(-2) + '</span> <span class="author">' + author + ':</span> ' + text + '</div>');
+			$('.chat').append('<div class="wrap"><div class="post icon_' + chat + '"><span class="timestamp">' + hours.substr(-2) + ':' + minutes.substr(-2) + '</span> <span class="author">' + author + ':</span> ' + text + '</div></div>');
 		}
 	</script>
 </head>
 <body>
+<div class="counter icon_twitch">100500</div>
+<div class="counter icon_cybergame">100500</div>
+<div class="counter icon_goodgame">100500</div>
+<div class="counter icon_hitbox">100500</div>
 <div class="chat"></div>
 </body>
 </html>

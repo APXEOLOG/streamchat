@@ -12,7 +12,7 @@ body {
 	font-size: 14px;
 	color:#696969;
 	padding:16px;
-	font-family: "RobotoMedium", Verdana, Helvetica, Arial;
+	font-family:  "RobotoMedium", Verdana, Helvetica, Arial;
 }
 .author {
 	color:#008000;
@@ -26,6 +26,8 @@ body {
 	overflow-y: scroll; 
 	height:400px;
 	width:350px;
+	margin-top: 2px;
+	border-top:1px solid black;
 }
 .icon_cybergame {
 		background: url(http://cybergame.tv/favicon.ico) no-repeat;
@@ -41,11 +43,23 @@ body {
 }
 .post{
 	padding-left:24px;
-	margin-bottom:8px;
-	margin-left:8px;
+	margin:8px;
 	background-position: 0px 2px;
-	margin-right: 8px;
 }
 .timestamp{
 	color:#aaa;
+}
+.counter{
+	background-position: 0px 2px;
+	width:20px;
+	display:inline;
+	padding-left:24px;
+	padding-right:5px;
+}
+.wrap{
+
+	    outline: 1px solid #ddd;
+        border-top: 1px solid #fff;
+        background: #f0f0f0;
+        padding:5px;
 }
